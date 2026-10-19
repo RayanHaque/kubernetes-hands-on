@@ -62,3 +62,12 @@ kubectl delete -f pod.yaml
 - NodePort
 - YAML manifests
 - Deploying and accessing a containerized application
+
+## Screenshots
+
+
+### Service Working/pod running
+![Service Working](screenshots/service/pod-working.png)
+
+### Application in Browser
+![NGINX Browser](screenshots/nginx-browser.png)
