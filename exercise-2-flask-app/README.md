@@ -1,4 +1,4 @@
-# Exercise 3: Deploy a Flask App on Minikube
+# Exercise 2: Deploy a Flask App on Minikube
 
 ## Objective
 Deploy a small Python Flask application to Kubernetes using Minikube, a Docker image, a Deployment, and a NodePort Service.
