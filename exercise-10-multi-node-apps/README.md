@@ -1,4 +1,4 @@
-# Exercise 2: Multi-Node Kubernetes Cluster with Multiple Applications and Replicas
+# Exercise 10: Multi-Node Kubernetes Cluster with Multiple Applications and Replicas
 
 ## Objective
 Deploy two simple Flask applications to a three-node Minikube cluster:
