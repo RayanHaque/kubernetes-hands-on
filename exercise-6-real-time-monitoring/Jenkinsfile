@@ -1,0 +1,34 @@
+pipeline {
+    agent any
+    stages {
+        stage('Pre-check') {
+            steps {
+                echo 'Starting ZAPPTTO delivery monitoring pipeline'
+                sh 'pwd'
+                sh 'test -f delivery_metrics.py'
+                sh 'test -f prometheus.yml'
+                sh 'test -f alert_rules.yml'
+                sh 'test -f docker-compose.yml'
+            }
+        }
+        stage('Validate Python') {
+            steps {
+                sh 'python3 -m py_compile delivery_metrics.py'
+            }
+        }
+        stage('Validate Compose') {
+            steps {
+                sh 'docker compose config -q'
+            }
+        }
+        stage('Build Delivery Metrics Image') {
+            steps {
+                sh 'docker compose build delivery-metrics'
+            }
+        }
+    }
+    post {
+        success { echo 'Validation and image build completed successfully.' }
+        failure { echo 'Pipeline failed. Check the stage logs for details.' }
+    }
+}
