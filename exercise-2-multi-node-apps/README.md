@@ -118,3 +118,20 @@ minikube -p devops-multinode delete
 - Kubernetes Services and NodePort
 - Loading local images into Minikube
 - Verifying Pod placement across nodes
+
+## Screenshots
+
+### Three-Node Minikube Cluster
+![Three Nodes](screenshots/three-nodes.png)
+
+### Deployments
+![Deployments](screenshots/deployments.png)
+
+### Pods and Node Placement
+![Pods Across Nodes](screenshots/pods-across-nodes.png)
+
+### Product Catalog
+![Product Catalog](screenshots/product-catalog.png)
+
+### Shopping Cart
+![Shopping Cart](screenshots/shopping-cart.png)
