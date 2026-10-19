@@ -19,7 +19,9 @@ pipeline {
         stage('Validate Python') {
             steps {
                 dir('exercise-6-real-time-monitoring') {
-                    sh 'python3 -m py_compile delivery_metrics.py'
+                    sh '''
+    cat delivery_metrics.py | docker run --rm -i python:3.13-slim python -c 'import sys; compile(sys.stdin.read(), "delivery_metrics.py", "exec")'
+'''
                 }
             }
         }
