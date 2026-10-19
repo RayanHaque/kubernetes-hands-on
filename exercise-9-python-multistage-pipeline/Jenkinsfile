@@ -1,0 +1,64 @@
+pipeline {
+    agent any
+
+    environment {
+        APP_IMAGE = "python-multistage-app:${BUILD_NUMBER}"
+        APP_CONTAINER = "python-multistage-app"
+    }
+
+    stages {
+        stage('Build') {
+            steps {
+                dir('exercise-9-python-multistage-pipeline') {
+                    echo 'Building the Flask application image...'
+                    sh 'docker build -t "$APP_IMAGE" .'
+                }
+            }
+        }
+
+        stage('Test') {
+            steps {
+                dir('exercise-9-python-multistage-pipeline') {
+                    echo 'Running unit tests inside the Python application image...'
+                    sh 'docker run --rm "$APP_IMAGE" python -m unittest discover -s .'
+                }
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                dir('exercise-9-python-multistage-pipeline') {
+                    echo 'Copying application files to a mock deployment directory...'
+                    sh 'mkdir -p "$WORKSPACE/python-app-deploy" && cp app.py requirements.txt "$WORKSPACE/python-app-deploy/" && test -f "$WORKSPACE/python-app-deploy/app.py"'
+                }
+            }
+        }
+
+        stage('Run Application') {
+            steps {
+                echo 'Starting the Flask application container on port 5001...'
+                sh 'docker rm -f "$APP_CONTAINER" >/dev/null 2>&1 || true; docker run -d --name "$APP_CONTAINER" -p 5001:5000 "$APP_IMAGE"'
+            }
+        }
+
+        stage('Test Application') {
+            steps {
+                echo 'Checking the Flask application with its unit test...'
+                sh 'docker exec "$APP_CONTAINER" python -m unittest discover -s .'
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Pipeline completed successfully!'
+            echo 'If port mapping is accessible from your host, open http://localhost:5001'
+        }
+        failure {
+            echo 'Pipeline failed. Check the console output for details.'
+        }
+        always {
+            echo 'Pipeline run finished.'
+        }
+    }
+}
