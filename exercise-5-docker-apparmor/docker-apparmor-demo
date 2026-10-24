@@ -1,0 +1,30 @@
+#include <tunables/global>
+
+profile docker-apparmor-demo flags=(attach_disconnected,mediate_deleted) {
+    #include <abstractions/base>
+
+    network inet stream,
+    network inet6 stream,
+
+    # Allow standard executable and library access
+    /usr/bin/** rix,
+    /usr/local/bin/** rix,
+    /bin/** rix,
+    /lib/** mr,
+    /lib/** r,
+    /usr/lib/** mr,
+    /usr/lib/** r,
+    /usr/local/lib/** mr,
+    /usr/local/lib/** r,
+
+    # Allow application access
+    /app/** rw,
+    /tmp/** rw,
+    /dev/null rw,
+    /dev/urandom r,
+
+    # Deny access to sensitive files
+    deny /etc/shadow r,
+    deny capability sys_admin,
+    deny mount,
+}
